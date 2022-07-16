@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- jquery -->
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous">
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>排球戰術版</title>
+</head>
+<script type="text/javascript">
+    function player(x,y,num,backnum){
+            this.corx=x;
+            this.cory=y;
+            this.stmap=new Path2D();
+            this.stmap.arc(x,y,40,0,Math.PI*2,true);
+            this.num=num;
+            this.color="black";
+            this.backnum=backnum;
+            this.realbacknum=backnum;
+        }
+        //一開始的位置
+        palyer1 = new player(200,800,1,'1');
+        palyer2 = new player(500,800,2,'2');
+        palyer3 = new player(500,500,3,'3');
+        palyer4 = new player(500,200,4,'4');
+        palyer5 = new player(200,200,5,'5');
+        palyer6 = new player(200,500,6,'6');
+        var players=[palyer1,palyer2,palyer3,palyer4,palyer5,palyer6];
+    var canvas=document.getElementById("tutorial");
+    // var outctx ;
+    // function outdrawall();
+    
+    function draw(){
+      var canvas = document.getElementById('tutorial');
+      if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+        // outctx = ctx;//將內參數拋置共同變數
+      }
+
+    //   畫場地
+        var court = new Path2D();
+        court.rect(50, 50, 600, 900);
+        let m = new DOMMatrix();
+        m.a = 1; m.b = 0;
+        m.c = 0; m.d = 1;
+        m.e = 600; m.f = 0;
+        court.addPath(court, m);
+        ctx.stroke(court);
+        // ctx.beginPath();
+        // ctx.moveTo(50,50);
+        // ctx.lineTo(50,950);
+        // ctx.lineTo(650,950);
+        // ctx.lineTo(650,50);
+        // ctx.closePath();
+        // ctx.moveTo(650,50);
+        // ctx.lineTo(1250,50);
+        // ctx.lineTo(1250,950);
+        // ctx.lineTo(650,950);
+        // ctx.closePath();
+        
+        //宣告player物件
+        
+
+        function resetplayer(tempplayer,x,y,numm,backnum){
+
+            for (const key in tempplayer) {
+            delete tempplayer[key];
+            }
+            
+            replayer100 = new player(x,y,numm,backnum);
+            return replayer100;
+        }
+        //宣告繪製player
+        function drawPlayer(player){
+            ctx.fill(player.stmap);
+            //繪製球員號碼
+            ctx.font = "48px arial";
+            ctx.textAlign = "center";
+            //context.fillText('Hello Cavans!!',x,y);
+            ctx.strokeStyle = "white"; // stroke color
+            ctx.strokeText(player.backnum,player.corx,player.cory+15);
+
+        }
+
+        //塗改畫布並重新繪製player
+        // function redraw(playernow,mosX,mosY,number){
+        //     ctx.clearRect(playernow.corx-40,playernow.cory-40,80,80);
+        //     $("html").mousemove(function(e){
+                
+        //         var playerafter=resetplayer(playernow,e.pageX,e.pageY,number);
+        //         playernow=playerafter;
+        //         console.log(playerafter);
+        //         ctx.clearRect(playerafter.corx-40,playerafter.cory-40,80,80);
+                    
+        //         drawall();
+        //     })
+        //     drawall();
+        // }
+
+    
+    //畫全部隊員
+        function drawall(){
+        canvas.width=canvas.width;
+        ctx.beginPath();
+        ctx.stroke(court);
+        drawPlayer(palyer1);
+        drawPlayer(palyer2);
+        drawPlayer(palyer3);
+        drawPlayer(palyer4);
+        drawPlayer(palyer5);
+        drawPlayer(palyer6);
+        
+        }
+        //將方程式拋出
+        // outdrawall=drawall;
+
+        drawall();
+
+
+
+        //看游標位置若碰到球員則顯示
+        var mouseX,mouseY;
+        $("html").mousemove(function(e){
+              mouseX=e.pageX;
+              mouseY=e.pageY;
+            if(e.pageX>=(palyer1.corx-30)&&e.pageX<=palyer1.corx+50&&e.pageY>=palyer1.cory-30&&e.pageY<=palyer1.cory+50){
+                console.log("種了");
+            }else{
+               // console.log("洩了");
+            }
+        })
+
+        //點選player後
+        function clickplayer(){
+            if(clicked1||clicked2||clicked3||clicked4||clicked5||clicked6){
+                clicked1=false;
+                clicked2=false;
+                clicked3=false;
+                clicked4=false;
+                clicked5=false;
+                clicked6=false;
+                
+            }else{
+                if(mouseX>=(palyer1.corx-30)&&mouseX<=palyer1.corx+50&&mouseY>=palyer1.cory-30&&mouseY<=palyer1.cory+50){
+                // redraw(palyer1,mouseX,mouseY,1);
+                //console.log("有了點了");
+                clicked1 = true;
+                ctx.clearRect(palyer1.corx-40,palyer1.cory-40,80,80);
+                $("html").mousemove(function(e){
+                    if(clicked1){palyer1=resetplayer(palyer1,e.pageX,e.pageY,1,palyer1.backnum);
+                    ctx.clearRect(palyer1.corx-40,palyer1.cory-40,80,80);
+                    
+                    drawall();}
+                    
+                })
+             }else if(mouseX>=(palyer2.corx-30)&&mouseX<=palyer2.corx+50&&mouseY>=palyer2.cory-30&&mouseY<=palyer2.cory+50){
+                clicked2 = true; 
+                ctx.clearRect(palyer2.corx-40,palyer2.cory-40,80,80);
+                $("html").mousemove(function(e){
+                    if(clicked2){palyer2=resetplayer(palyer2,e.pageX,e.pageY,2,palyer2.backnum);
+                    ctx.clearRect(palyer2.corx-40,palyer2.cory-40,80,80);
+                    
+                    drawall();}
+                    
+                })
+
+            }else if(mouseX>=(palyer3.corx-30)&&mouseX<=palyer3.corx+50&&mouseY>=palyer3.cory-30&&mouseY<=palyer3.cory+50){
+                clicked3 = true;
+                ctx.clearRect(palyer3.corx-40,palyer3.cory-40,80,80);
+                $("html").mousemove(function(e){
+                    if(clicked3){palyer3=resetplayer(palyer3,e.pageX,e.pageY,3,palyer3.backnum);
+                    ctx.clearRect(palyer3.corx-40,palyer3.cory-40,80,80);
+                    
+                    drawall();}
+                    
+                })
+
+            }else if(mouseX>=(palyer4.corx-30)&&mouseX<=palyer4.corx+50&&mouseY>=palyer4.cory-30&&mouseY<=palyer4.cory+50){
+                clicked4 = true;
+                ctx.clearRect(palyer4.corx-40,palyer4.cory-40,80,80);
+                $("html").mousemove(function(e){
+                    if(clicked4){palyer4=resetplayer(palyer4,e.pageX,e.pageY,4,palyer4.backnum);
+                    ctx.clearRect(palyer4.corx-40,palyer4.cory-40,80,80);
+                    
+                    drawall();}
+                    
+                })
+
+            }else if(mouseX>=(palyer5.corx-30)&&mouseX<=palyer5.corx+50&&mouseY>=palyer5.cory-30&&mouseY<=palyer5.cory+50){
+                clicked5 = true;
+                ctx.clearRect(palyer5.corx-40,palyer5.cory-40,80,80);
+                $("html").mousemove(function(e){
+                    if(clicked5){palyer5=resetplayer(palyer5,e.pageX,e.pageY,5,palyer5.backnum);
+                    ctx.clearRect(palyer5.corx-40,palyer5.cory-40,80,80);
+                    
+                    drawall();}
+                    
+                })
+
+            }else if(mouseX>=(palyer6.corx-30)&&mouseX<=palyer6.corx+50&&mouseY>=palyer6.cory-30&&mouseY<=palyer6.cory+50){
+                clicked6 = true;
+                ctx.clearRect(palyer6.corx-40,palyer6.cory-40,80,80);
+                $("html").mousemove(function(e){
+                    if(clicked6){palyer6=resetplayer(palyer6,e.pageX,e.pageY,6,palyer6.backnum);
+                    ctx.clearRect(palyer6.corx-40,palyer6.cory-40,80,80);
+                    
+                    drawall();}
+                    
+                })
+
+            }
+
+            }
+           
+        }
+        //雙擊player換顏色
+        
+        function changecolor(){
+            players=[palyer1,palyer2,palyer3,palyer4,palyer5,palyer6];
+            for(let i = 0;i<players.length;i++){
+                if(mouseX>=(players[i].corx-30)&&mouseX<=players[i].corx+50&&mouseY>=players[i].cory-30&&mouseY<=players[i].cory+50){
+                if(players[i].color=="black"){
+                    players[i].color="white";
+                    
+                    players[i].backnum="lib";
+
+                    drawPlayer(players[i]);
+                    
+                }else{
+                    players[i].color="black";
+                    players[i].backnum=players[i].realbacknum;
+                    drawPlayer(players[i]);
+                }
+            }
+            }
+
+            
+        }
+        //下一輪站位
+        function coutford(num100){
+            if(num100==1){
+                num100=6;
+            }else{
+                num100=(num100-1)%6;
+            }
+            return num100;
+        }
+        function coutnext(num101){
+            if(num101==5){
+                num101=6;
+            }else{
+                num101=(num101+1)%6;
+            }
+            return num101;
+        }
+
+        function nextround(){
+                palyer1=moveToNext(palyer1);
+                palyer2=moveToNext(palyer2);
+                palyer3=moveToNext(palyer3);
+                palyer4=moveToNext(palyer4);
+                palyer5=moveToNext(palyer5);
+                palyer6=moveToNext(palyer6);
+
+                drawall();
+
+            }
+            // palyer1 = new player(200,800,coutnext(palyer1.num));
+            // palyer2 = new player(500,800,coutnext(palyer2.num));
+            // palyer3 = new player(500,500,coutnext(palyer3.num));
+            // palyer4 = new player(500,200,coutnext(palyer4.num));
+            // palyer5 = new player(200,200,coutnext(palyer5.num));
+            // palyer6 = new player(200,500,coutnext(palyer6.num));
+            function moveToNext(riplayer){
+                riplayer.num=coutnext(riplayer.num);
+                console.log(riplayer.backnum,' ',riplayer.num);
+                switch(riplayer.num){
+                case 1:
+                riplayer= new player(200,800,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 2:
+                riplayer= new player(500,800,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 3:
+                riplayer= new player(500,500,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 4:
+                riplayer= new player(500,200,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 5:
+                riplayer= new player(200,200,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 6:
+                riplayer= new player(200,500,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                default:
+                console.log(`Sorry, we are out of ${expr}.`);
+
+
+                }
+
+            }
+            function moveToFord(riplayer){
+                riplayer.num=coutford(riplayer.num);
+                console.log(riplayer.backnum,' ',riplayer.num);
+                switch(riplayer.num){
+                case 1:
+                riplayer= new player(200,800,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 2:
+                riplayer= new player(500,800,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 3:
+                riplayer= new player(500,500,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 4:
+                riplayer= new player(500,200,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 5:
+                riplayer= new player(200,200,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 6:
+                riplayer= new player(200,500,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                default:
+                console.log(`Sorry, we are out of ${expr}.`);
+
+
+                }
+
+            }
+            
+            function fordround(){
+                palyer1=moveToFord(palyer1);
+                palyer2=moveToFord(palyer2);
+                palyer3=moveToFord(palyer3);
+                palyer4=moveToFord(palyer4);
+                palyer5=moveToFord(palyer5);
+                palyer6=moveToFord(palyer6);
+
+                drawall();
+
+            }
+            
+            function moveToOrg(riplayer){
+                console.log(riplayer.backnum,' ',riplayer.num);
+                switch(riplayer.num){
+                case 1:
+                riplayer= new player(200,800,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 2:
+                riplayer= new player(500,800,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 3:
+                riplayer= new player(500,500,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 4:
+                riplayer= new player(500,200,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 5:
+                riplayer= new player(200,200,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                case 6:
+                riplayer= new player(200,500,riplayer.num,riplayer.realbacknum);
+                return riplayer;
+                break;
+                default:
+                console.log(`Sorry, we are out of ${expr}.`);
+
+
+                }
+
+            }
+            function orground(){
+                palyer1=moveToOrg(palyer1);
+                palyer2=moveToOrg(palyer2);
+                palyer3=moveToOrg(palyer3);
+                palyer4=moveToOrg(palyer4);
+                palyer5=moveToOrg(palyer5);
+                palyer6=moveToOrg(palyer6);
+
+                drawall();
+            }
+
+
+            function setNewName(){
+            players=[palyer1,palyer2,palyer3,palyer4,palyer5,palyer6];
+            for(let i = 0;i<players.length;i++){
+                if(mouseX>=(players[i].corx-30)&&mouseX<=players[i].corx+50&&mouseY>=players[i].cory-30&&mouseY<=players[i].cory+50){
+                if(players[i].color=="black"){
+                    players[i].color="white";
+                    var name='lib';
+                    // var obt=document.getElementById("bt");
+                    // var otxt=document.getElementById("txt");
+                    // obt.onclick=function(){
+                    //     otxt.value=prompt("螞蟻部落","輸入網站地址");
+                    // }
+
+                    //players[i].backnum="lib";
+                    name=prompt("螞蟻部落","lib");
+                    if(name==null){name=players[i].realbacknum};
+                    players[i].backnum=name;
+                    drawPlayer(players[i]);
+                    
+                }else{
+                    players[i].color="black";
+                    players[i].backnum=players[i].realbacknum;
+                    drawPlayer(players[i]);
+                }
+            }
+            }
+
+            
+        }
+        
+        var clicked1 = false,clicked2 = false,clicked3 = false,clicked4 = false,clicked5 = false,clicked6 = false;
+        
+        var el = document.body;
+        el.addEventListener('click',clickplayer, false);
+        //el.addEventListener('dblclick',changecolor);
+        el.addEventListener('dblclick',setNewName);
+
+        var button=document.getElementById('button');
+        button.addEventListener('click',nextround);
+
+        var buttonford=document.getElementById('buttonford');
+        buttonford.addEventListener('click',fordround);
+
+        var buttonorg=document.getElementById('buttonorg');
+        buttonorg.addEventListener('click',orground);
+
+
+
+
+
+
+
+
+
+        
+        
+
+        
+        
+
+
+        
+        // ctx.beginPath();
+        // ctx.arc(200,200,40,0,Math.PI*2,true);
+        // ctx.arc(200,500,40,0,Math.PI*2,true);
+        // ctx.arc(200,800,40,0,Math.PI*2,true);
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.arc(500,200,40,0,Math.PI*2,true);
+        // ctx.arc(500,500,40,0,Math.PI*2,true);
+        // ctx.arc(500,800,40,0,Math.PI*2,true);
+        // ctx.fill();
+    
+    //寫上號碼
+      
+
+
+
+    }
+
+  </script>
+<style type="text/css">
+      canvas { border: 1px solid black; }
+
+      button { width: 20%;
+      height: 10%;
+      color: gray;
+      font-size: 30px;
+      position:relative;}
+</style>
+
+<body onload="draw();">
+    <canvas id="tutorial" width="1400" height="1000"></canvas>
+    <button id="button" type="button" >下一輪站位</button>
+    <button id="buttonford" type="button" >上一輪站位</button>
+    <button id="buttonorg" type="button" >原來站位</button>
+    <button id="ballGame" type="button">玩球球</button>
+    
+    
+    
+</body>
+
+
+</html>
